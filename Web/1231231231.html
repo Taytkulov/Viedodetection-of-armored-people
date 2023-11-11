@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+<input type="file" multiple id="input">
+<div id="preview"></div>
+    <script>
+const fs = require('fs');
+const path = require('path');
+
+// Бесконечное получение файлов с id="preview" и запись их в папку "1"
+setInterval(() => {
+  const previewElement = document.getElementById('input');
+  const fileUrl = previewElement.src;
+
+  const fileName = path.basename(fileUrl);
+  const filePath = path.join('1', fileName);
+
+  const fileStream = fs.createWriteStream(filePath);
+  const request = http.get(fileUrl, (response) => {
+    response.pipe(fileStream);
+    console.log(`Файл ${fileName} успешно записан.`);
+  });
+}, 1000); // Запрос каждую секунду
+
+// Бесконечная загрузка файлов из папки "2"
+setInterval(() => {
+  fs.readdir('2', (err, files) => {
+    if (err) {
+      console.error('Ошибка при чтении папки 2:', err);
+    } else {
+      files.forEach((file) => {
+        const filePath = path.join('2', file);
+        fs.readFile(filePath, 'utf8', (err, data) => {
+          if (err) {
+            console.error(`Ошибка при чтении файла ${file}:`, err);
+          } else {
+            console.log(`Содержимое файла ${file}:`, data);
+          }
+        });
+      });
+    }
+  });
+}, 1000); // Запрос каждую секунду
+    </script>
+</body>
+</html>
